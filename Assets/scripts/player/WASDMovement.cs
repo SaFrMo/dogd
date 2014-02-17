@@ -15,7 +15,38 @@ public class WASDMovement : MonoBehaviour {
 	// SPECIFIC TO DOGD
 	// ===================
 
-	public bool IsAttached { get; protected set; }
+	public bool Docked { get; private set; }
+	
+	GameObject dock = null;
+	
+	public float dockingRate = 0.1f;
+	public float clampDistance = 1f;
+
+	// SET TARGET (GO)
+	// ===================
+	// Creates a new target to dock on to
+	
+	public void SetTarget (GameObject target) {
+		Docked = false;
+		dock = target;
+	}
+
+	// GO TO TARGET()
+	// ==================
+	// Move towards the target while rotating toward it.
+	// TODO: Snap-to key increases rotation speed
+	
+	//Vector3 dockingOffset;
+	
+	Vector3 GoToTarget() {
+		if (dock != null && Vector3.Distance (transform.position, dock.transform.position) >= clampDistance) {
+			return Vector3.MoveTowards (transform.position, dock.transform.position, dockingRate * Time.deltaTime);
+		}
+		else {
+			dock = null;
+			return transform.position;
+		}
+	}
 
 
 
@@ -63,8 +94,21 @@ public class WASDMovement : MonoBehaviour {
 		rigidbody.MovePosition (newPosition);
 	}
 
+	void Dock() {
+		newPosition = GoToTarget();
+		rigidbody.MovePosition (newPosition);
+	}
+
+	void Start () {
+		Docked = false;
+	}
 
 	protected void Update () {
-		Controls();
+		if (dock == null) {
+			Controls();
+		}
+		else {
+			Dock();
+		}
 	}
 }

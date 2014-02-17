@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Dockable : MonoBehaviour {
 
+	static GameObject player = null;
+
 	// IMPLEMENTATION
 	// ================
 	// Attach to every Dockable object.
@@ -38,8 +40,29 @@ public class Dockable : MonoBehaviour {
 	}
 
 
+	// SELECT THIS ()
+	// ===================
+	// Transports and rotates the player to this Dockable
+
+	void SelectThis () {
+		// activate on mouse click when mouse is over GO
+		if (MouseIsOver && Input.GetMouseButtonDown (0)) {
+			player.GetComponent<WASDMovement>().SetTarget (gameObject);
+		}
+	}
+
+
 	void Start() {
 		// Save original material
 		originalShader = renderer.material.shader;
+
+		// Set player, if not yet set
+		if (player == null) {
+			player = GameObject.Find ("Player");
+		}
+	}
+
+	void Update () {
+		SelectThis();
 	}
 }
