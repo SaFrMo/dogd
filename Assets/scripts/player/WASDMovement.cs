@@ -15,19 +15,19 @@ public class WASDMovement : MonoBehaviour {
 	// SPECIFIC TO DOGD
 	// ===================
 
-	public bool Docked { get; private set; }
+	//public bool Docked { get; private set; }
 	
 	GameObject dock = null;
 	
 	public float dockingRate = 0.1f;
 	public float clampDistance = 1f;
+	public float rotationRate = 1f;
 
 	// SET TARGET (GO)
 	// ===================
 	// Creates a new target to dock on to
 	
 	public void SetTarget (GameObject target) {
-		Docked = false;
 		dock = target;
 	}
 
@@ -48,12 +48,11 @@ public class WASDMovement : MonoBehaviour {
 		}
 	}
 
-
-
-
-	// END SPECIFIC MATERIAL
-	// ===================
-
+	void RotateToTarget () {
+		if (dock != null) {
+			transform.rotation = Quaternion.RotateTowards (transform.rotation, dock.transform.rotation, rotationRate * Time.deltaTime);
+		}
+	}
 
 
 	// rate at which to move
@@ -86,10 +85,10 @@ public class WASDMovement : MonoBehaviour {
 
 	protected void Controls() {
 		newPosition = transform.position +
-			SingleControl (KeyCode.W, Vector3.up) +
-			SingleControl (KeyCode.A, Vector3.left) +
-			SingleControl (KeyCode.S, Vector3.down) +
-			SingleControl (KeyCode.D, Vector3.right);
+			//SingleControl (KeyCode.W, Vector3.up) +
+			SingleControl (KeyCode.A, transform.TransformDirection(Vector3.left)) +
+			//SingleControl (KeyCode.S, Vector3.down) +
+			SingleControl (KeyCode.D, transform.TransformDirection(Vector3.right));
 
 		rigidbody.MovePosition (newPosition);
 	}
@@ -97,12 +96,9 @@ public class WASDMovement : MonoBehaviour {
 	void Dock() {
 		newPosition = GoToTarget();
 		rigidbody.MovePosition (newPosition);
+		RotateToTarget();
 	}
-
-	void Start () {
-		Docked = false;
-	}
-
+	
 	protected void Update () {
 		if (dock == null) {
 			Controls();
