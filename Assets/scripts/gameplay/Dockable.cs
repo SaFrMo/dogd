@@ -12,8 +12,12 @@ public class Dockable : MonoBehaviour {
 	public bool Selected { get; private set; }
 	public bool Clicked { get; private set; }
 
-	Material originalMaterial;
+	Shader originalShader;
 	public Shader glow;
+
+	// these can be changed from instance to instance
+	public Color outlineColor = new Color (0, 255, 0);
+	public float outlineWidth = 0.01f;
 
 	// CHECK FOR DOCKABLE SURFACE
 	// ============================
@@ -24,18 +28,18 @@ public class Dockable : MonoBehaviour {
 	void OnMouseEnter () {
 		MouseIsOver = true;
 		renderer.material.shader = glow;
-
+		renderer.material.SetColor ("_OutlineColor", outlineColor);
+		renderer.material.SetFloat ("_Outline", outlineWidth);
 	}
 
-	void OnMouseLeave () {
+	void OnMouseExit () {
 		MouseIsOver = false;
-		renderer.material = originalMaterial;
-		print ("gone");
+		renderer.material.shader = originalShader;
 	}
 
 
 	void Start() {
 		// Save original material
-		originalMaterial = renderer.material;
+		originalShader = renderer.material.shader;
 	}
 }
