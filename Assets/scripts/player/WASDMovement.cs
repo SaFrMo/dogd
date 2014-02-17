@@ -17,10 +17,6 @@ public class WASDMovement : MonoBehaviour {
 
 	public bool IsAttached { get; protected set; }
 
-	public float slowDownDistance = 1f;
-
-	public float slowDownAmount = 0.05f;
-
 
 
 
@@ -30,8 +26,7 @@ public class WASDMovement : MonoBehaviour {
 
 
 	// rate at which to move
-	public float movementRate = 0.5f;
-	float toMove;
+	const float movementRate = 0.05f;
 
 	// where the rigidbody will move
 	Vector3 newPosition;
@@ -41,9 +36,9 @@ public class WASDMovement : MonoBehaviour {
 	// Called for each possible control. Result is added to transform.position
 	// to produce accurate movement.
 
-	protected Vector3 SingleControl(KeyCode key, Vector3 direction) {
+	protected Vector3 SingleControl(KeyCode key, Vector3 direction, float rate = movementRate) {
 		if (Input.GetKey (key)) {
-			return direction * toMove;
+			return direction * rate;
 		}
 		else {
 			return Vector3.zero;
@@ -64,17 +59,6 @@ public class WASDMovement : MonoBehaviour {
 			SingleControl (KeyCode.A, Vector3.left) +
 			SingleControl (KeyCode.S, Vector3.down) +
 			SingleControl (KeyCode.D, Vector3.right);
-
-		// slows down the player as they approach a wall/other object if they are free-floating
-		if (!IsAttached) {
-			if (Physics.Raycast (new Ray (transform.position, newPosition * 500), slowDownDistance)) {
-				toMove = movementRate * slowDownAmount;
-			}
-			else {
-				toMove = movementRate;
-			}
-		}
-
 
 		rigidbody.MovePosition (newPosition);
 	}
