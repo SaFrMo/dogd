@@ -56,7 +56,7 @@ public class WASDMovement : MonoBehaviour {
 
 
 	// rate at which to move
-	const float movementRate = 0.05f;
+	const float movementRate = 0.1f;
 
 	// where the rigidbody will move
 	Vector3 newPosition;
@@ -99,7 +99,7 @@ public class WASDMovement : MonoBehaviour {
 		RotateToTarget();
 	}
 	
-	protected void Update () {
+	protected void FixedUpdate () {
 		if (dock == null) {
 			Controls();
 		}
