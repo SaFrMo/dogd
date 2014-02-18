@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Dockable : MonoBehaviour {
 
-	static GameObject player = null;
+	public static GameObject player = null;
 
 	// IMPLEMENTATION
 	// ================

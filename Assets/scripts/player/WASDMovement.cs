@@ -37,20 +37,27 @@ public class WASDMovement : MonoBehaviour {
 	// TODO: Snap-to key increases rotation speed
 	
 	//Vector3 dockingOffset;
+
+	bool correctAltitude;
+	bool correctRotation;
 	
-	Vector3 GoToTarget() {
-		if (dock != null && Vector3.Distance (transform.position, dock.transform.position) >= clampDistance) {
-			return Vector3.MoveTowards (transform.position, dock.transform.position, dockingRate * Time.deltaTime);
+	void GoToTarget() {
+		if (dock != null && Vector3.Distance(transform.position, dock.transform.position) >= clampDistance) {
+			correctAltitude = false;
+			rigidbody.MovePosition (Vector3.MoveTowards (transform.position, dock.transform.position, dockingRate * Time.deltaTime));
 		}
 		else {
-			dock = null;
-			return transform.position;
+			correctAltitude = true;
 		}
 	}
 
 	void RotateToTarget () {
-		if (dock != null) {
+		if (dock != null && transform.rotation != dock.transform.rotation) {
 			transform.rotation = Quaternion.RotateTowards (transform.rotation, dock.transform.rotation, rotationRate * Time.deltaTime);
+			correctRotation = false;
+		}
+		else {
+			correctRotation = true;
 		}
 	}
 
@@ -94,9 +101,11 @@ public class WASDMovement : MonoBehaviour {
 	}
 
 	void Dock() {
-		newPosition = GoToTarget();
-		rigidbody.MovePosition (newPosition);
+		GoToTarget();
 		RotateToTarget();
+		if (correctAltitude && correctRotation) {
+			dock = null;
+		}
 	}
 	
 	protected void FixedUpdate () {
