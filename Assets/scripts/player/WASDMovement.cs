@@ -43,7 +43,8 @@ public class WASDMovement : MonoBehaviour {
 	bool correctRotation;
 	
 	void GoToTarget() {
-		if (dock != null && Mathf.Abs (transform.position.y) - Mathf.Abs (dock.transform.position.y) >= clampDistance) {
+		if (dock != null && (Mathf.Abs (transform.position.y) - Mathf.Abs (dock.transform.position.y) >= clampDistance ||
+		                     Mathf.Abs (transform.position.z) - Mathf.Abs (dock.transform.position.z) >= clampDistance)) {
 		    				//Vector3.Distance(transform.position, dock.transform.position + Vector3.up) >= clampDistance) {
 			correctAltitude = false;
 			rigidbody.useGravity = false;
@@ -111,6 +112,7 @@ public class WASDMovement : MonoBehaviour {
 
 		rigidbody.MovePosition (newPosition);
 
+		// allows differentiation between tap-jumps and held-jumps
 		if (canJump) {
 			if (Input.GetKeyDown(KeyCode.Space)) {
 				jumpStart = new Timer (.04f, 5);
@@ -145,7 +147,7 @@ public class WASDMovement : MonoBehaviour {
 		else {
 			Dock();
 			if (Input.GetKeyDown (KeyCode.W) || Input.GetKeyDown (KeyCode.A) || Input.GetKeyDown(KeyCode.D)) {
-				dock = null;
+				//dock = null;
 			}
 		}
 	}
