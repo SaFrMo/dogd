@@ -22,6 +22,7 @@ public class WASDMovement : MonoBehaviour {
 	public float dockingRate = 0.1f;
 	public float clampDistance = 1f;
 	public float rotationRate = 1f;
+	Vector3 jumpForce = Vector3.up;
 
 	// SET TARGET (GO)
 	// ===================
@@ -42,18 +43,22 @@ public class WASDMovement : MonoBehaviour {
 	bool correctRotation;
 	
 	void GoToTarget() {
-		if (dock != null && Vector3.Distance(transform.position, dock.transform.position) >= clampDistance) {
+		if (dock != null && Mathf.Abs (transform.position.y) - Mathf.Abs (dock.transform.position.y) >= clampDistance) {
+		    				//Vector3.Distance(transform.position, dock.transform.position + Vector3.up) >= clampDistance) {
 			correctAltitude = false;
-			rigidbody.MovePosition (Vector3.MoveTowards (transform.position, dock.transform.position, dockingRate * Time.deltaTime));
+			rigidbody.useGravity = false;
+			rigidbody.MovePosition (Vector3.MoveTowards (transform.position, dock.transform.position + Vector3.up, dockingRate * Time.deltaTime));
 		}
 		else {
 			correctAltitude = true;
+			rigidbody.useGravity = true;
 		}
 	}
 
 	void RotateToTarget () {
 		if (dock != null && transform.rotation != dock.transform.rotation) {
 			transform.rotation = Quaternion.RotateTowards (transform.rotation, dock.transform.rotation, rotationRate * Time.deltaTime);
+			rigidbody.useGravity = false;
 			correctRotation = false;
 		}
 		else {
@@ -90,14 +95,36 @@ public class WASDMovement : MonoBehaviour {
 
 	RaycastHit hit;
 
+	Timer jumpStart;
+	bool canJump = true;
+
+	void OnCollisionStay() {
+		canJump = true;
+	}
+
 	protected void Controls() {
 		newPosition = transform.position +
-			//SingleControl (KeyCode.W, Vector3.up) +
+			//SingleControl (KeyCode.Space, transform.TransformDirection(Vector3.up)) +
 			SingleControl (KeyCode.A, transform.TransformDirection(Vector3.left)) +
 			//SingleControl (KeyCode.S, Vector3.down) +
 			SingleControl (KeyCode.D, transform.TransformDirection(Vector3.right));
 
 		rigidbody.MovePosition (newPosition);
+
+		if (canJump) {
+			if (Input.GetKeyDown(KeyCode.Space)) {
+				jumpStart = new Timer (.04f, 5);
+				rigidbody.AddRelativeForce (jumpForce, ForceMode.Force);
+			}
+			if (Input.GetKey (KeyCode.Space)) {
+				if (jumpStart.RunTimer()) {
+					rigidbody.AddRelativeForce (jumpForce, ForceMode.Impulse);
+				}
+			}
+			if (Input.GetKeyUp (KeyCode.Space)) {
+				canJump = false;
+			}
+		}
 	}
 
 	void Dock() {
@@ -108,12 +135,18 @@ public class WASDMovement : MonoBehaviour {
 		}
 	}
 	
-	protected void FixedUpdate () {
+	protected void Update () {
 		if (dock == null) {
 			Controls();
+			if (!rigidbody.useGravity) {
+				rigidbody.useGravity = true;
+			}
 		}
 		else {
 			Dock();
+			if (Input.GetKeyDown (KeyCode.W) || Input.GetKeyDown (KeyCode.A) || Input.GetKeyDown(KeyCode.D)) {
+				dock = null;
+			}
 		}
 	}
 }
