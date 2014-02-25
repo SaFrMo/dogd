@@ -1,0 +1,5 @@
+Gameplay focuses on various parts:
+
+The bulk of the game is in EXPLORATION mode, where the player has standard WASD controls as well as a click-based Zero G Manuevering System system.
+- WASD controls based on global axes. WASD controls function when player is on a magnetic surface.
+- Click control based on global axes. Click controls function as zero-g manuevering controls.
