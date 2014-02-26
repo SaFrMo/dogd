@@ -20,15 +20,15 @@ public class Conversation : MonoBehaviour {
 	public Texture2D conversationIcon;
 	
 	// so we can hide the icon when the conversation's displayed
-	public bool showIcon = true;
+	public bool showIcon { get; private set; }
 	
 	// bouncing variables
-	public float distanceAboveNPC = 0f;
-	public float smoothAvail;
-	public float height = 100f;
+	public float distanceAboveNPC { get; private set; }
+	public float bouncingSmooth = 6.5f;
+	public float bounceHeight = 10f;
 	
 	// dummy style to clear the default Unity style (ie, no visible background, in this case)
-	public GUIStyle style;
+	GUIStyle style = new GUIStyle();
 	
 	// shows the "use key" icon above the NPC if a conversation is available
 	void ShowConversationAvailable () {
@@ -45,16 +45,16 @@ public class Conversation : MonoBehaviour {
 	
 	void CalculateDistanceAboveNPC () {
 		if (rising) {
-			distanceAboveNPC = Mathf.SmoothStep (distanceAboveNPC, height, Time.deltaTime * smoothAvail);
+			distanceAboveNPC = Mathf.SmoothStep (distanceAboveNPC, bounceHeight, Time.deltaTime * bouncingSmooth);
 			// the 0.2f here and below help the bouncing motion avoid the Unity long, slow end-of-lerp problem
-			if (distanceAboveNPC > height - 0.2f) {
+			if (distanceAboveNPC > bounceHeight - 0.2f) {
 				rising = false;
 			}
 		}
 		else {
-			distanceAboveNPC = Mathf.SmoothStep (distanceAboveNPC, -height, Time.deltaTime * smoothAvail);
+			distanceAboveNPC = Mathf.SmoothStep (distanceAboveNPC, -bounceHeight, Time.deltaTime * bouncingSmooth);
 			// see the "if" clause above
-			if (Mathf.Abs (distanceAboveNPC) > height - 0.2f) {
+			if (Mathf.Abs (distanceAboveNPC) > bounceHeight - 0.2f) {
 				rising = true;
 			}
 		}
@@ -70,7 +70,7 @@ public class Conversation : MonoBehaviour {
 	 */
 	
 	// is the NPC near a player?
-	public bool isNearPlayer = false;
+	public bool isNearPlayer { get; private set; }
 	// range when the above will trigger "true"
 	public float range = 2f;
 	// space to save the player
@@ -127,11 +127,11 @@ public class Conversation : MonoBehaviour {
 	*/
 
 	// will display conversation text
-	public bool showConversation = false;
+	public bool showConversation { get; private set; }
 	public Texture2D continueIcon;
 
 	// these need to be overridden in children classes
-	public int conversationIndex = 0;
+	protected int conversationIndex = 0;
 
 
 	// Content information
@@ -153,11 +153,11 @@ public class Conversation : MonoBehaviour {
 	// box resizing information
 	float currentWidth = 0;
 	float currentHeight = 0;
-	float maxWidth = 200f;
-	float maxHeight = 200f;
+	public float maxWidth = 200f;
+	public float maxHeight = 200f;
 
-	public float spacer = 5f;
-	public float smooth = 2f;
+	float spacer = 5f;
+	float smooth = 2f;
 
 	// key to activate/deactivate conversations
 	KeyCode useKey = KeyCode.E;
@@ -201,14 +201,17 @@ public class Conversation : MonoBehaviour {
 		}
 	}
 
+	public float conversationWindowX = 0;
+	public float conversationWindowY = 0;
+
 	// the conversation window itself, where all the text is displayed
 	void ConversationWindow () {
 
 
 
 
-		Rect textBox = new Rect (Camera.main.WorldToScreenPoint (transform.position).x - currentWidth * .75f,
-		                         Camera.main.WorldToScreenPoint (transform.position).y + transform.renderer.bounds.extents.y + spacer,
+		Rect textBox = new Rect ((Camera.main.WorldToScreenPoint (transform.position).x - currentWidth * .75f) + conversationWindowX,
+		                         Camera.main.WorldToScreenPoint (transform.position).y + transform.renderer.bounds.extents.y + spacer - conversationWindowY,
 		                         currentWidth,
 		                         currentHeight);
 
@@ -305,7 +308,7 @@ public class Conversation : MonoBehaviour {
 		showConversation = false;
 	}
 
-	public int conversationIndexCopy;
+	protected int conversationIndexCopy;
 
 	// have another character say something
 	protected void Interrupt (GameObject character, int theirLine) {

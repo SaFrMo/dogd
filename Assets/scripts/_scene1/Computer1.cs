@@ -54,8 +54,35 @@ public class Computer1 : Conversation {
 		switch (key) {
 
 		case 0:
-			toContent = "CONTENT, MAN.";
+			toContent = "Target ship <i>Grand Duchy</i> within sensor range. Zero life forms aboard ship. Shall I begin playing the boarding message?";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "Go ahead, computer.", 1 }
+			};
 			break;
+
+		case 1:
+			toContent = "Transmitting. Patching playback through. Good luck, Captain.";
+			AllowContinue();
+			break;
+
+		case 2:
+			DoneTalking();
+			Advance (4);
+			//randomSet = false;
+			break;
+
+		case 3:
+			toContent = idleString;
+			AllowContinue(4);
+			break;
+
+		case 4:
+			DoneTalking();
+			idleString = GetIdle ();
+			Advance (3);
+			break;
+
 
 
 		};
@@ -65,7 +92,26 @@ public class Computer1 : Conversation {
 
 		content = toContent;
 	}
-	
+
+	string idleString;
+
+	string GetIdle () {
+		//if (!randomSet) {
+			string[] idle = new string[] {
+				"ILOVEYOU.exe downloading: 47%...",
+				"All systems nominal, Captain.",
+				"All systems nominal, Captain.",
+				"All systems nominal, Captain.",
+				"I'm afraid I can't do that, Captain.",
+				"Captain...There's a man on the wing.",
+				"while (true) { Console.WriteLine (\"help i'm stuck in a computer chip\"); }",
+				"while (true) { Console.WriteLine (\"help i'm stuck in a computer chip\"); }"
+			};
+			idleString = idle[UnityEngine.Random.Range (0, idle.Length)];
+		//}
+		return (idleString);
+	}
+
 
 
 	
