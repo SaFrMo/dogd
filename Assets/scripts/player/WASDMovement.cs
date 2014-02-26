@@ -136,7 +136,7 @@ public class WASDMovement : MonoBehaviour {
 			dock = null;
 		}
 	}
-	
+
 	protected void Update () {
 		if (dock == null) {
 			Controls();

@@ -26,9 +26,10 @@ public class Scene1a : MonoBehaviour {
 			if (obj == null) {
 				obj = GameObject.Find ("Computer");
 			}
-			if (computer.GetComponent<ComputerBehavior>().Play01()) {
+			/*
+			if (obj.GetComponent<ComputerBehavior>().Play01()) {
 				scriptPlace++;
-			}
+			}*/
 			break;
 
 			// player tells computer to transmit message

@@ -33,9 +33,11 @@ public class SPS : MonoBehaviour {
 	// An Arma-esque "dandelion" will appear to guide the player
 
 	public void ShowTheWay () {
+		/*
 		foreach (GameObject go in target) {
 			print (go.transform.name);
 		}
+		*/
 	}
 
 	void Update () {
