@@ -4,6 +4,114 @@ using System.Collections.Generic;
 
 public class Conversation : MonoBehaviour {
 
+	// THE ENORMOUS AND TERRIFYING CONVERSATION-HAVER
+	// ================================================
+	// But it works great!
+
+	// USE: Create a class based on GenericConversationTemplate, which is a child of this class. Follow instructions from there.
+	// NOTE: You shouldn't need to attach <CONVERSATION>, this script, anywhere.
+	
+
+	// <CONVERSATION AVAILABLE> MODULE
+	// ================================
+
+	
+	// icon to display
+	public Texture2D conversationIcon;
+	
+	// so we can hide the icon when the conversation's displayed
+	public bool showIcon = true;
+	
+	// bouncing variables
+	public float distanceAboveNPC = 0f;
+	public float smoothAvail;
+	public float height = 100f;
+	
+	// dummy style to clear the default Unity style (ie, no visible background, in this case)
+	public GUIStyle style;
+	
+	// shows the "use key" icon above the NPC if a conversation is available
+	void ShowConversationAvailable () {
+		if (isNearPlayer && showIcon) {
+			GUI.Box (new Rect (Camera.main.WorldToScreenPoint(transform.position).x - transform.renderer.bounds.extents.x,
+			                   Camera.main.WorldToScreenPoint(transform.renderer.bounds.extents).y + distanceAboveNPC,
+			                   conversationIcon.width,
+			                   conversationIcon.height), conversationIcon, style);
+		}
+	}
+	
+	// animates the bouncing for the icon
+	bool rising = true;
+	
+	void CalculateDistanceAboveNPC () {
+		if (rising) {
+			distanceAboveNPC = Mathf.SmoothStep (distanceAboveNPC, height, Time.deltaTime * smoothAvail);
+			// the 0.2f here and below help the bouncing motion avoid the Unity long, slow end-of-lerp problem
+			if (distanceAboveNPC > height - 0.2f) {
+				rising = false;
+			}
+		}
+		else {
+			distanceAboveNPC = Mathf.SmoothStep (distanceAboveNPC, -height, Time.deltaTime * smoothAvail);
+			// see the "if" clause above
+			if (Mathf.Abs (distanceAboveNPC) > height - 0.2f) {
+				rising = true;
+			}
+		}
+	}
+
+	
+	// <SCAN FOR CONVERSATION> MODULE
+	// ================================
+	
+	
+	/*
+	 * FIELDS
+	 */
+	
+	// is the NPC near a player?
+	public bool isNearPlayer = false;
+	// range when the above will trigger "true"
+	public float range = 2f;
+	// space to save the player
+	GameObject player;
+	
+	
+	/*
+	 * METHODS
+	 */
+	
+	// save the player gameobject
+	void GetPlayer() {
+		player = GameObject.Find ("Player");
+	}
+	
+	// is the player near this npc?
+	void GetNearPlayer () {
+		if (Mathf.Abs(player.transform.position.x - transform.position.x ) <= range) {
+			if (GetComponent<Conversation>().interruptionOverride) {
+				isNearPlayer = false;
+			}
+			else {
+				isNearPlayer = true;
+			}
+		}
+		else {
+			if (GetComponent<Conversation>().interruptionOverride) {
+				isNearPlayer = true;
+			}
+			else {
+				isNearPlayer = false;
+			}
+		}
+	}
+	
+
+
+	// CONVERSATION BASE CLASS
+	// =========================
+
+
 	/*
 	 * FIELDS
 	 */
@@ -75,17 +183,17 @@ public class Conversation : MonoBehaviour {
 
 	// displays either the "hey! listen! conversation available!" icon or the conversation itself
 	void IsShowWindow () {
-		if (gameObject.GetComponent<ScanForConversation>().isNearPlayer) {
+		if (isNearPlayer) {
 			if (Input.GetKeyDown(useKey)) {
 				showConversation = !showConversation;
 			}
 			if (showConversation) 
-				gameObject.GetComponent<ConversationAvailable>().showIcon = false;
+				showIcon = false;
 			else {
 				if (interruptionOverride)
-					gameObject.GetComponent<ConversationAvailable>().showIcon = false;
+					showIcon = false;
 				else
-					gameObject.GetComponent<ConversationAvailable>().showIcon = true;
+					showIcon = true;
 			}
 		}
 		else {
@@ -224,14 +332,18 @@ public class Conversation : MonoBehaviour {
 		text = GUIStyleHolder.GetComponent<MasterGUIStyle>().text;
 		playerChoice = GUIStyleHolder.GetComponent<MasterGUIStyle>().playerChoice;
 		*/
+		GetPlayer();
 	}
 
 	void Update () {
 		IsShowWindow();
+		GetNearPlayer();
 	}
 
 	void OnGUI () {
 		GUI.skin = skin;
+		ShowConversationAvailable();
+		CalculateDistanceAboveNPC();
 		ConversationWindow();
 	}
 }
