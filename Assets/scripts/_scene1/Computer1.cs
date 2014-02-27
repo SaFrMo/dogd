@@ -68,6 +68,7 @@ public class Computer1 : Conversation {
 
 		case 2:
 			DoneTalking();
+			Scene1a.scriptPlace++;
 			Advance (4);
 			//randomSet = false;
 			break;
@@ -112,7 +113,4 @@ public class Computer1 : Conversation {
 		return (idleString);
 	}
 
-
-
-	
 }

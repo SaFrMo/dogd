@@ -3,18 +3,24 @@ using System.Collections;
 
 public class Scene1a : MonoBehaviour {
 
-	Timer t;
+	static Timer t;
 
 	// locator for scripted events
-	int scriptPlace = 0;
+	public static int scriptPlace = -1;
 
-	GameObject obj = null;
+	static GameObject obj = null;
 
-	void ScriptedEvents() {
+	public static void ScriptedEvents() {
 
 		switch (scriptPlace) {
 
-			// wait 5 seconds
+			// set timer
+		case -1:
+			t = new Timer(5f);
+			scriptPlace++;
+			break;
+
+			// wait x seconds
 		case 0:
 			if (t.RunTimer()) {
 				scriptPlace++;
@@ -26,15 +32,25 @@ public class Scene1a : MonoBehaviour {
 			if (obj == null) {
 				obj = GameObject.Find ("Computer");
 			}
-			/*
-			if (obj.GetComponent<ComputerBehavior>().Play01()) {
-				scriptPlace++;
-			}*/
+			obj.GetComponent<Computer1>().enabled = true;
+			scriptPlace++;
 			break;
 
-			// player tells computer to transmit message
+			// reset object
 		case 2:
-			print ("At 2!");
+			obj = null;
+			break;
+
+			//player tells computer to transmit message - deactivate door,
+			// activate "jumping out" trigger
+		case 3:
+			if (obj == null) {
+				obj = GameObject.Find ("Door");
+			}
+			// Change the door material
+			obj.GetComponent<BoxCollider>().isTrigger = true;
+			obj = null;
+			scriptPlace++;
 			break;
 		}
 	}
@@ -42,10 +58,11 @@ public class Scene1a : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		t = new Timer(5f);
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		ScriptedEvents();
 	}
 }
