@@ -34,7 +34,7 @@ public class Conversation : MonoBehaviour {
 	void ShowConversationAvailable () {
 		if (isNearPlayer && showIcon) {
 			GUI.Box (new Rect (Camera.main.WorldToScreenPoint(transform.position).x - transform.renderer.bounds.extents.x,
-			                   Camera.main.WorldToScreenPoint(transform.renderer.bounds.extents).y + distanceAboveNPC,
+			                   (GUIUtility.ScreenToGUIPoint (Camera.main.WorldToScreenPoint(transform.renderer.bounds.extents)).y) - distanceAboveNPC,
 			                   conversationIcon.width,
 			                   conversationIcon.height), conversationIcon, style);
 		}
@@ -88,7 +88,7 @@ public class Conversation : MonoBehaviour {
 	
 	// is the player near this npc?
 	void GetNearPlayer () {
-		if (Mathf.Abs(player.transform.position.x - transform.position.x ) <= range) {
+		if (Vector3.Distance (player.transform.position, gameObject.transform.position) <= range) {
 			if (GetComponent<Conversation>().interruptionOverride) {
 				isNearPlayer = false;
 			}
@@ -335,6 +335,7 @@ public class Conversation : MonoBehaviour {
 		text = GUIStyleHolder.GetComponent<MasterGUIStyle>().text;
 		playerChoice = GUIStyleHolder.GetComponent<MasterGUIStyle>().playerChoice;
 		*/
+		showIcon = true;
 		GetPlayer();
 	}
 

@@ -5,12 +5,16 @@ public class Scene1a : MonoBehaviour {
 
 	static Timer t;
 
+	public AudioClip ding;
+	public AudioClip message;
+
 	// locator for scripted events
 	public static int scriptPlace = -1;
 
 	static GameObject obj = null;
+	
 
-	public static void ScriptedEvents() {
+	public void ScriptedEvents() {
 
 		switch (scriptPlace) {
 
@@ -33,6 +37,10 @@ public class Scene1a : MonoBehaviour {
 				obj = GameObject.Find ("Computer");
 			}
 			obj.GetComponent<Computer1>().enabled = true;
+			if (!audio.isPlaying) {
+				audio.clip = ding;
+				audio.Play ();
+			}
 			scriptPlace++;
 			break;
 
@@ -48,6 +56,12 @@ public class Scene1a : MonoBehaviour {
 				obj = GameObject.Find ("Door");
 			}
 			// Change the door material
+			if (!audio.isPlaying) {
+				audio.clip = message;
+				audio.Play ();
+			}
+			// Overdub music on message
+			// Script player movement?
 			obj.GetComponent<BoxCollider>().isTrigger = true;
 			obj = null;
 			scriptPlace++;

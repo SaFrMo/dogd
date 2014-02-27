@@ -130,9 +130,9 @@ public class WASDMovement : MonoBehaviour {
 	}
 
 	void Dock() {
-		GoToTarget();
+		//GoToTarget();
 		RotateToTarget();
-		if (correctAltitude && correctRotation) {
+		if (correctRotation) {//correctAltitude && correctRotation) {
 			dock = null;
 		}
 	}
