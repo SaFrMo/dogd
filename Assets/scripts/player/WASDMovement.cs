@@ -69,7 +69,7 @@ public class WASDMovement : MonoBehaviour {
 
 
 	// rate at which to move
-	const float movementRate = 0.1f;
+	public float movementRate = 0.1f;
 
 	// where the rigidbody will move
 	Vector3 newPosition;
@@ -79,9 +79,9 @@ public class WASDMovement : MonoBehaviour {
 	// Called for each possible control. Result is added to transform.position
 	// to produce accurate movement.
 
-	protected Vector3 SingleControl(KeyCode key, Vector3 direction, float rate = movementRate) {
+	protected Vector3 SingleControl(KeyCode key, Vector3 direction) {
 		if (Input.GetKey (key)) {
-			return direction * rate;
+			return direction * movementRate;
 		}
 		else {
 			return Vector3.zero;
