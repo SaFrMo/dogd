@@ -33,8 +33,8 @@ public class Conversation : MonoBehaviour {
 	// shows the "use key" icon above the NPC if a conversation is available
 	void ShowConversationAvailable () {
 		if (isNearPlayer && showIcon) {
-			GUI.Box (new Rect (Camera.main.WorldToScreenPoint(transform.position).x - transform.renderer.bounds.extents.x,
-			                   (GUIUtility.ScreenToGUIPoint (Camera.main.WorldToScreenPoint(transform.renderer.bounds.extents)).y) - distanceAboveNPC,
+			GUI.Box (new Rect (Camera.main.WorldToScreenPoint(transform.position).x - renderer.bounds.extents.x,
+			                   Screen.height - Camera.main.WorldToScreenPoint (transform.position).y - renderer.bounds.extents.y - distanceAboveNPC,
 			                   conversationIcon.width,
 			                   conversationIcon.height), conversationIcon, style);
 		}
