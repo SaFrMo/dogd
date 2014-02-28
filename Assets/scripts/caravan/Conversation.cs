@@ -23,7 +23,7 @@ public class Conversation : MonoBehaviour {
 	public bool showIcon { get; private set; }
 	
 	// bouncing variables
-	public float distanceAboveNPC { get; private set; }
+	public float distanceAboveNPC = 10f;
 	public float bouncingSmooth = 6.5f;
 	public float bounceHeight = 10f;
 	
@@ -34,7 +34,7 @@ public class Conversation : MonoBehaviour {
 	void ShowConversationAvailable () {
 		if (isNearPlayer && showIcon) {
 			GUI.Box (new Rect (Camera.main.WorldToScreenPoint(transform.position).x - renderer.bounds.extents.x,
-			                   Screen.height - Camera.main.WorldToScreenPoint (transform.position).y - renderer.bounds.extents.y - distanceAboveNPC,
+			                   Screen.height - Camera.main.WorldToScreenPoint (transform.position).y + renderer.bounds.extents.y + distanceAboveNPC,
 			                   conversationIcon.width,
 			                   conversationIcon.height), conversationIcon, style);
 		}

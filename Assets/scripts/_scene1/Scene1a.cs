@@ -7,6 +7,7 @@ public class Scene1a : MonoBehaviour {
 
 	public AudioClip ding;
 	public AudioClip message;
+	public AudioClip doorOff;
 
 	// locator for scripted events
 	public static int scriptPlace = -1;
@@ -56,6 +57,8 @@ public class Scene1a : MonoBehaviour {
 				obj = GameObject.Find ("Door");
 			}
 			// Change the door material
+			obj.audio.Play ();
+
 			if (!audio.isPlaying) {
 				audio.clip = message;
 				audio.Play ();
