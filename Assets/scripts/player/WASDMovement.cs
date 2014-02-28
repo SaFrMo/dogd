@@ -70,6 +70,7 @@ public class WASDMovement : MonoBehaviour {
 
 	// rate at which to move
 	public float movementRate = 0.1f;
+	float movementCopy;
 
 	// where the rigidbody will move
 	Vector3 newPosition;
@@ -78,6 +79,15 @@ public class WASDMovement : MonoBehaviour {
 	// ====================
 	// Called for each possible control. Result is added to transform.position
 	// to produce accurate movement.
+
+	public void Freeze (bool toFreeze) {
+		if (toFreeze) {
+			movementRate = 0;
+		}
+		else {
+			movementRate = movementCopy;
+		}
+	}
 
 	protected Vector3 SingleControl(KeyCode key, Vector3 direction) {
 		if (Input.GetKey (key)) {
@@ -135,6 +145,10 @@ public class WASDMovement : MonoBehaviour {
 		if (correctRotation) {//correctAltitude && correctRotation) {
 			dock = null;
 		}
+	}
+
+	void Start () {
+		movementCopy = movementRate;
 	}
 
 	protected void Update () {

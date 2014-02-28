@@ -74,7 +74,7 @@ public class Conversation : MonoBehaviour {
 	// range when the above will trigger "true"
 	public float range = 2f;
 	// space to save the player
-	GameObject player;
+	protected GameObject player;
 	
 	
 	/*
@@ -328,7 +328,7 @@ public class Conversation : MonoBehaviour {
 	 * MAKIN' IT HAPPEN
 	 */
 
-	void Start () {
+	protected void Start () {
 		/*
 		text.wordWrap = true;
 		style = GUIStyleHolder.GetComponent<MasterGUIStyle>().style;

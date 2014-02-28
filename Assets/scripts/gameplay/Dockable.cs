@@ -21,6 +21,10 @@ public class Dockable : MonoBehaviour {
 	public Color outlineColor = new Color (0, 255, 0);
 	public float outlineWidth = 0.01f;
 
+	static float TIME_SCALE_MIN = .6f;
+	float changeTime = 1f;
+
+
 	// CHECK FOR DOCKABLE SURFACE
 	// ============================
 	// 1. Is mouse above a surface tagged "DOCKABLE"?
@@ -28,6 +32,7 @@ public class Dockable : MonoBehaviour {
 	// 3. 	If so and if clicked, send player to that surface.
 
 	void OnMouseEnter () {
+		//Time.timeScale = Mathf.SmoothStep (Time.timeScale, TIME_SCALE_MIN, changeTime);
 		MouseIsOver = true;
 		renderer.material.shader = glow;
 		renderer.material.SetColor ("_OutlineColor", outlineColor);
@@ -35,6 +40,7 @@ public class Dockable : MonoBehaviour {
 	}
 
 	void OnMouseExit () {
+		//Time.timeScale = Mathf.SmoothStep (Time.timeScale, 1f, changeTime);
 		MouseIsOver = false;
 		renderer.material.shader = originalShader;
 	}
