@@ -22,8 +22,10 @@ public class ClickToLoadLevel : MonoBehaviour {
 		renderer.material.SetFloat ("_Outline", outlineWidth);
 	}
 
-	void OnCollisionEnter () {
-		Application.LoadLevel (levelToLoad);
+	void OnMouseOver () {
+		if (Input.GetMouseButtonDown(0)) {
+			Application.LoadLevel (levelToLoad);
+		}
 	}
 
 	void OnMouseExit () {
