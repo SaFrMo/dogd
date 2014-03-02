@@ -2,8 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class VantagePoint : Conversation {
+public class VantagePoint1 : Conversation {
 
+	// Variation of the standard Vantage Point script to allow for specific dialogue
+	
 	// IMPLEMENTATION:
 	/* GetContent is the main function here. First, it resets the following values:
 	 * 		playerLines: the dictionary<string, int> that contains what a player says and what index that leads to
@@ -14,32 +16,32 @@ public class VantagePoint : Conversation {
 	 * 			place than the next index.
 	 * 
 	 */
-
+	
 	// this is the string the NPC will say
 	string toContent;
-
-
-
+	
+	
+	
 	// allow progression to next conversation index
 	void AllowContinue () {
 		showContinueButton = true;
 	}
-
+	
 	// jump to a special index
 	void AllowContinue (int where) {
 		showContinueButton = true;
 		whereTo = where;
 	}
-
+	
 	void AllowPlayerLines () {
 		showPlayerLine = true;
 	}
-
+	
 	public float targetCameraSize;
 	public float rate = 5f;
 	float originalCameraSize;
 	float originalMovement;
-
+	
 	// HOW TO USE
 	// 1. toContent = what the NPC will say.
 	// 2a. If the player is allowed to progress to the next line without any choice, call AllowContinue() or AllowContinue(int where).
@@ -49,26 +51,38 @@ public class VantagePoint : Conversation {
 	// 3. If the NPC is to be interrupted, call Interrupt (gameObject interrupter, int lineInterrupterSays); on the relevant case.
 	//		Make sure to set conversationIndex on the other character to the one you want them to start out with when you speak with them next.
 	protected override void GetContent (int key, out string content, out Dictionary<string, int> playerLines) {
-
+		
 		interruptionOverride = false;
 		playerLines = null;
 		showContinueButton = false;
 		showPlayerLine = false;
 		whereTo = -1;
-
+		
 		switch (key) {
-
+			
 		case 0:
+			toContent = "Alright, computer. Begin annotations.";
 			AllowContinue();
 			break;
-
+			
 		case 1:
 			Camera.main.orthographicSize = Mathf.Lerp (Camera.main.orthographicSize, targetCameraSize, rate * Time.deltaTime);
+			toContent = "Target ship Grand Duchy is a luxury passenger liner. Listed as destroyed in the war.";
 			player.GetComponent<WASDMovement>().Freeze(true);
 			AllowContinue();
 			break;
 
 		case 2:
+			toContent = "The ship looks fine for the most part; what I can’t figure out is the growth off the side. Maybe a specialized recreational area.";
+			AllowContinue();
+			break;
+
+		case 3:
+			toContent = "It looks like a unique to this vessel, so the blueprints will be worth something.";
+			AllowContinue();
+			break;
+			
+		case 4:
 			// snaps-to at 0.2 difference
 			if (Camera.main.orthographicSize - originalCameraSize >= 1f) {
 				player.GetComponent<WASDMovement>().Freeze (false);
@@ -79,23 +93,23 @@ public class VantagePoint : Conversation {
 				Advance(0);
 			}
 			break;
-
-
+			
+			
 		};
-
+		
 		if (!showConversation)
 			showPlayerLine = false;
-
+		
 		content = toContent;
-
+		
 	}
-
+	
 	protected void Start () {
 		base.Start();
 		originalCameraSize = Camera.main.orthographicSize;
 	}
 	
-
-
+	
+	
 	
 }
