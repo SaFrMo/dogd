@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Terminal2_sc2 : Conversation {
+public class Terminal3_sc2 : Conversation {
 
 	// IMPLEMENTATION:
 	/* GetContent is the main function here. First, it resets the following values:
@@ -54,32 +54,89 @@ public class Terminal2_sc2 : Conversation {
 		switch (key) {
 
 		case 0:
-			if (!GAME_MANAGER_SCENE_2.powerOn) {
-				toContent = "No power to this terminal.";
-				AllowContinue(98);
+			if (GAME_MANAGER_SCENE_2.powerOn) {
+				toContent = "Captain. Relevant material discovered.";
+				AllowPlayerLines();
+				playerLines = new Dictionary<string, int> () {
+					{ "Go ahead, computer.", 1 }
+				};
 				break;
 			}
 			else {
-				toContent = "Initiate upload. Scan for relevant material. Scan for passenger lists and blueprints especially. I’m going to see if I can recover any hardware.";
+				toContent = "No power to this terminal yet.";
 				AllowContinue(99);
 				break;
 			}
 
 		case 1:
-			toContent = "Everything nominal here.";
-			AllowContinue (99);
+			toContent = "Grand Duchy is listed as a Courrier-class adaptive liner, destroyed in the war.";
+			AllowContinue();
 			break;
 
+		case 2:
+			toContent = "All <i>right</i>. We got lucky with this one. Begin annotation.";
+			AllowContinue();
+			break;
 
+		case 3:
+			toContent = "This is an unclaimed adaptive liner. A-liners ripe for picking are gold mines; they’ve got plenty of uniques in both hardware and blueprints.";
+			AllowContinue();
+			break;
 
-		case 98:
+		case 4:
+			toContent = "Further relevant information discovered.";
+			AllowPlayerLines () ;
+			playerLines = new Dictionary<string, int>() {
+				{ "Stop annotation. Go ahead.", 5 }
+			};
+			break;
+
+		case 5:
+			toContent = "Passenger list contains a Rachel Davis.";
+			AllowContinue();
+			break;
+
+		case 6:
+			toContent = "...";
+			AllowContinue();
+			break;
+
+		case 7:
+			toContent = "...";
+			AllowContinue();
+			break;
+
+		case 8:
+			toContent = "There are lots of Rachels out there. Doesn’t mean it’s Rachel.";
+			AllowContinue();
+			break;
+
+		case 9:
+			toContent = "Descriptions match your subscribed alerts for Rachel Davis, female, twenty-five -";
+			AllowPlayerLines ();
+			playerLines = new Dictionary<string, int>() {
+				{ "[Interrupt]", 10 }
+			};
+			break;
+
+		case 10:
+			toContent = "Fine. Okay. Continue scanning. Save relevant information, but don’t update me yet.";
+			AllowContinue();
+			break;
+
+		case 11:
+			toContent = "Acknowledged.";
+			AllowContinue();
+			break;
+
+		case 12:
 			DoneTalking();
-			Advance (0);
+			Advance (9);
 			break;
 
 		case 99:
 			DoneTalking();
-			Advance (1);
+			Advance(0);
 			break;
 
 
