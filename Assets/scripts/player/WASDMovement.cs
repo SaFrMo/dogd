@@ -98,6 +98,12 @@ public class WASDMovement : MonoBehaviour {
 		}
 	}
 
+	protected void FlyingControls (KeyCode key, Vector3 direction) {
+		if (Input.GetKey (key)) {
+			rigidbody.AddForce (transform.TransformDirection(direction * fuelMovementRate));
+		}
+	}
+
 	// MAIN CONTROLS
 	// ====================
 	// Runs all Single Controls and generates a new Vector3 based on the results,
@@ -106,21 +112,36 @@ public class WASDMovement : MonoBehaviour {
 
 	RaycastHit hit;
 
+	float fuelMovementRate = 4f;
+
 	Timer jumpStart;
 	bool canJump = true;
+	bool canFly = false;
+	bool flying = false;
+	bool canLand = false;
 
 	void OnCollisionStay() {
 		canJump = true;
 	}
 
 	protected void Controls() {
-		newPosition = transform.position +
-			//SingleControl (KeyCode.Space, transform.TransformDirection(Vector3.up)) +
-			SingleControl (KeyCode.A, transform.TransformDirection(Vector3.left)) +
-			//SingleControl (KeyCode.S, Vector3.down) +
-			SingleControl (KeyCode.D, transform.TransformDirection(Vector3.right));
+		if (!flying) {
+			newPosition = transform.position +
+				//SingleControl (KeyCode.Space, transform.TransformDirection(Vector3.up)) +
+				SingleControl (KeyCode.A, transform.TransformDirection(Vector3.left)) +
+				//SingleControl (KeyCode.S, Vector3.down) +
+				SingleControl (KeyCode.D, transform.TransformDirection(Vector3.right));
+			rigidbody.MovePosition (newPosition);
+		}
 
-		rigidbody.MovePosition (newPosition);
+		/*
+		else {
+			if (Input.GetKeyDown (KeyCode.W)) {
+				rigidbody.AddForce (transform.TransformDirection(Vector3.up * fuelMovementRate));
+			}
+		}
+		*/
+
 
 		// allows differentiation between tap-jumps and held-jumps
 		if (canJump) {
@@ -135,8 +156,36 @@ public class WASDMovement : MonoBehaviour {
 			}
 			if (Input.GetKeyUp (KeyCode.Space)) {
 				canJump = false;
+				canFly = true;
 			}
 		}
+
+		else if (canFly) {
+			if (Input.GetKeyDown (KeyCode.Space)) {
+				if (rigidbody.constantForce.enabled) {
+					rigidbody.constantForce.enabled = false;
+					canFly = false;
+					flying = true;
+				}
+			}
+		}
+
+		else if (flying) {
+			FlyingControls (KeyCode.W, transform.TransformDirection(Vector3.up));
+			FlyingControls (KeyCode.A, transform.TransformDirection(Vector3.left));
+			FlyingControls (KeyCode.S, transform.TransformDirection(Vector3.down));
+			FlyingControls (KeyCode.D, transform.TransformDirection(Vector3.right));
+		}
+	}
+
+	void OnCollisionEnter () {
+		if (!rigidbody.constantForce.enabled) {
+			rigidbody.constantForce.enabled = true;
+
+		}
+		canJump = true;
+		canFly = true;
+		flying = false;
 	}
 
 	void Dock() {
@@ -154,9 +203,11 @@ public class WASDMovement : MonoBehaviour {
 	protected void Update () {
 		if (dock == null) {
 			Controls();
+			/*
 			if (!rigidbody.useGravity) {
 				rigidbody.useGravity = true;
 			}
+			*/
 		}
 		else {
 			Dock();
