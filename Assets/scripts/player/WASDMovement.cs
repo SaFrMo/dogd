@@ -120,9 +120,15 @@ public class WASDMovement : MonoBehaviour {
 	bool canFly = false;
 	bool flying = false;
 	bool canLand = false;
+	bool grounded = true;
 
 	void OnCollisionStay() {
 		canJump = true;
+		grounded = true;
+	}
+
+	void OnCollisionExit () {
+		grounded = false;
 	}
 
 	protected void Controls() {
@@ -188,7 +194,6 @@ public class WASDMovement : MonoBehaviour {
 	void OnCollisionEnter () {
 		if (!rigidbody.constantForce.enabled) {
 			rigidbody.constantForce.enabled = true;
-
 		}
 		canJump = true;
 		canFly = true;
@@ -203,12 +208,36 @@ public class WASDMovement : MonoBehaviour {
 		}
 	}
 
+	// ANIMATION
+	// ============
+
+	Animator animator;
+
+	void PlayerAnimation () {
+		//if (grounded) {
+			if (!Input.GetKey (KeyCode.A) && !Input.GetKey (KeyCode.D)) {
+					animator.SetInteger("Direction", 0);
+				}
+			else {
+				animator.SetInteger ("Direction", 1);//(Input.GetKey (KeyCode.A) ? 1 : 2));
+			}
+		//}
+	}
+
+
+	// START AND UPDATE
+	// ===================
+
 	void Start () {
 		movementCopy = movementRate;
+		animator = GetComponentInChildren<Animator>();
 	}
 
 	protected void Update () {
+		print (animator.GetInteger("Direction"));
+		PlayerAnimation();
 		if (dock == null) {
+
 			Controls();
 			/*
 			if (!rigidbody.useGravity) {
