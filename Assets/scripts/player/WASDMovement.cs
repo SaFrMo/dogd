@@ -99,8 +99,9 @@ public class WASDMovement : MonoBehaviour {
 	}
 
 	protected void FlyingControls (KeyCode key, Vector3 direction) {
-		if (Input.GetKey (key)) {
+		if (Input.GetKeyDown (key) && gameObject.GetComponent<FuelManagement>().FuelCount > 0) {
 			rigidbody.AddForce (transform.TransformDirection(direction * fuelMovementRate));
+			gameObject.GetComponent<FuelManagement>().ChangeFuelCount(-1);
 		}
 	}
 
@@ -112,7 +113,7 @@ public class WASDMovement : MonoBehaviour {
 
 	RaycastHit hit;
 
-	float fuelMovementRate = 4f;
+	float fuelMovementRate = 100f;
 
 	Timer jumpStart;
 	bool canJump = true;
@@ -175,6 +176,12 @@ public class WASDMovement : MonoBehaviour {
 			FlyingControls (KeyCode.A, transform.TransformDirection(Vector3.left));
 			FlyingControls (KeyCode.S, transform.TransformDirection(Vector3.down));
 			FlyingControls (KeyCode.D, transform.TransformDirection(Vector3.right));
+			if (Input.GetKeyDown(KeyCode.Space)) {
+				canJump = true;
+				canFly = true;
+				flying = false;
+				rigidbody.constantForce.enabled = true;
+			}
 		}
 	}
 
