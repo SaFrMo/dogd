@@ -55,26 +55,22 @@ public class Terminal1_sc2 : Conversation {
 
 		case 0:
 			toContent = "Let's see...";
-			AllowContinue(1);
+			AllowPlayerLines ();
+			playerLines = new Dictionary<string, int>() {
+				{ "[Switch power on.]", (GAME_MANAGER_SCENE_2.powerOn ? 1 : 2) }
+			};
 			break;
 
 		case 1:
-			if (!GAME_MANAGER_SCENE_2.powerOn) {
-				GAME_MANAGER_SCENE_2.powerOn = true;
-				toContent = "[Switch power on.]";
-				Advance(2);
-			}
-			else {
-				toContent = "I already switched the power on.";
-				AllowContinue(99);
-			}
+			toContent = "I already switched the power on.";
+			AllowContinue(99);
 			break;
 
 		case 2:
 			toContent = "Computer, set aside two terabytes; I’m going to copy over the ship’s system data.";
+			GAME_MANAGER_SCENE_2.powerOn = true;
 			AllowContinue(99);
 			break;
-
 
 
 		case 99:
