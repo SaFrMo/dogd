@@ -57,34 +57,53 @@ public class Terminal3_sc2 : Conversation {
 			toContent = "Receiving.";
 			AllowPlayerLines();
 			playerLines = new Dictionary<string, int>() {
-				{ "Computer, I'm getting uncomfortable that I say \"thank you\" to you so regularly now.", 1 }
+				{ "Is there any data unique to this terminal?", 1 }
 			};
 			break;
 
 		case 1:
-			toContent = "Awaiting query or command.";
+			toContent = "None. Terminal is connected to the same network as previous access point.";
 			AllowPlayerLines();
 			playerLines = new Dictionary<string, int>() {
-				{ "You can't really understand what I'm saying, can you?", 2 }
+				{ "Thank you, computer.", 2 }
 			};
 			break;
 
 		case 2:
-			toContent = "Your transmission is coming through clearly. Voice-activated command activated and running properly.";
+			toContent = "Received.";
 			AllowPlayerLines();
 			playerLines = new Dictionary<string, int>() {
-				{ "Alright. Okay. Thanks.", 3 }
+				{ "...", 3 }
 			};
 			break;
 
 		case 3:
-			toContent = "Received.";
-			AllowContinue();
+			toContent = "Receiving.";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "It's silly that I thank you when you do something.", 4 }
+			};
 			break;
 
 		case 4:
+			toContent = "Awaiting query or command.";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "You can't really understand what I'm saying, can you?", 5 }
+			};
+			break;
+
+		case 5:
+			toContent = "Your transmission is coming through clearly. Voice-activated command activated and running properly.";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "Alright. Okay. Thanks.", 6 }
+			};
+			break;
+
+		case 6:
 			DoneTalking();
-			Advance(0);
+			Advance (4);
 			break;
 
 
