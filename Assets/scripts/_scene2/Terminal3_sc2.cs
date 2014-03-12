@@ -54,6 +54,62 @@ public class Terminal3_sc2 : Conversation {
 		switch (key) {
 
 		case 0:
+			toContent = "Receiving.";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "Computer, I'm getting uncomfortable that I say \"thank you\" to you so regularly now.", 1 }
+			};
+			break;
+
+		case 1:
+			toContent = "Awaiting query or command.";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "You can't really understand what I'm saying, can you?", 2 }
+			};
+			break;
+
+		case 2:
+			toContent = "Your transmission is coming through clearly. Voice-activated command activated and running properly.";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "Alright. Okay. Thanks.", 3 }
+			};
+			break;
+
+		case 3:
+			toContent = "Received.";
+			AllowContinue();
+			break;
+
+		case 4:
+			DoneTalking();
+			Advance(0);
+			break;
+
+
+			/*
+
+		case 1:
+			toContent = "Query not understood. Did you mean: <i>Byzantine</i>?";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "\"Byzantine?\" Where the hell did you get \"Byzantine?\"", 2 }
+			};
+			break;
+
+		case 2:
+			toContent = "Query not understood.";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "Computer, disregard previous query and begin personal recorder.", 3 }
+			};
+			break;
+
+*/
+
+			/*
+		case 0:
 			if (GAME_MANAGER_SCENE_2.powerOn) {
 				toContent = "Captain. Relevant material discovered.";
 				AllowPlayerLines();
@@ -138,6 +194,7 @@ public class Terminal3_sc2 : Conversation {
 			DoneTalking();
 			Advance(0);
 			break;
+			*/
 
 
 		};

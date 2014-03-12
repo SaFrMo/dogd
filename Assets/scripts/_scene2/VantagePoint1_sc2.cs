@@ -59,14 +59,18 @@ public class VantagePoint1_sc2 : Conversation {
 		switch (key) {
 
 		case 0:
+			toContent = "Receiving.";
 			AllowContinue();
 			break;
 
 		case 1:
-			toContent = "Emergency power source ahead; I’m going to see if I can boot it up and get some light.";
+			toContent = "Receiving.";
 			Camera.main.orthographicSize = Mathf.Lerp (Camera.main.orthographicSize, targetCameraSize, rate * Time.deltaTime);
 			player.GetComponent<WASDMovement>().Freeze(true);
-			AllowContinue();
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "Emergency power source ahead; I’m going to see if I can boot it up and get some light.", 2 }
+			};
 			break;
 
 		case 2:

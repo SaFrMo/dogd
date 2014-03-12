@@ -61,28 +61,48 @@ public class VantagePoint1 : Conversation {
 		switch (key) {
 			
 		case 0:
-			toContent = "Alright, computer. Begin annotations.";
-			AllowContinue();
+			toContent = "Receiving, Captain.";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "Begin annotation.", 1 }
+			};
 			break;
 			
 		case 1:
 			Camera.main.orthographicSize = Mathf.Lerp (Camera.main.orthographicSize, targetCameraSize, rate * Time.deltaTime);
-			toContent = "Target ship Grand Duchy is a luxury passenger liner. Listed as destroyed in the war.";
+			toContent = "You may proceed.";
 			player.GetComponent<WASDMovement>().Freeze(true);
-			AllowContinue();
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "Target ship <i>Grand Duchy</i> is a luxury passenger liner. Listed as destroyed in the war.", 2 }
+			};
 			break;
 
 		case 2:
-			toContent = "The ship looks fine for the most part; what I can’t figure out is the growth off the side. Maybe a specialized recreational area.";
-			AllowContinue();
+			toContent = "Recorded: \"Target ship <i>Grand Duchy</i> is a luxury passenger liner. Listed as destroyed in the war.\"";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "The ship has a large unique on its starboard side, but otherwise looks relatively standard.", 3 }
+			};
 			break;
 
 		case 3:
-			toContent = "It looks like a unique to this vessel, so the blueprints will be worth something.";
-			AllowContinue();
+			toContent = "Recorded: \"The ship has a large unique on its starboard side, but otherwise looks relatively standard.\"";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "I'll board and search for software blueprints before worrying about hardware uniques. Annotation complete.", 4 }
+			};
+			break;
+
+		case 4:
+			toContent = "Recorded: \"I'll board and search for software blueprints before worrying about hardware uniques.\" Annotation stopped.";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "Thank you, computer.", 5 }
+			};
 			break;
 			
-		case 4:
+		case 5:
 			// snaps-to at 0.2 difference
 			if (Camera.main.orthographicSize - originalCameraSize >= 1f) {
 				player.GetComponent<WASDMovement>().Freeze (false);

@@ -55,19 +55,30 @@ public class Terminal2_sc2 : Conversation {
 
 		case 0:
 			if (!GAME_MANAGER_SCENE_2.powerOn) {
-				toContent = "No power to this terminal.";
+				toContent = "No power to this terminal. Power control is due west from your current position.";
 				AllowContinue(98);
 				break;
 			}
 			else {
-				toContent = "Initiate upload. Scan for relevant material. Scan for passenger lists and blueprints especially. I’m going to see if I can recover any hardware.";
-				AllowContinue(99);
+				toContent = "Link established. Receiving.";
+				AllowPlayerLines();
+				playerLines = new Dictionary<string, int>() {
+					{ "Upload all data. Scan for passenger lists. Might be a missing persons bounty or two on here.", 2 }
+				};
 				break;
 			}
 
 		case 1:
 			toContent = "Everything nominal here.";
 			AllowContinue (99);
+			break;
+
+		case 2:
+			toContent = "Uploading data. Scanning passenger manifesto.";
+			AllowPlayerLines();
+			playerLines = new Dictionary<string, int>() {
+				{ "Thank you, computer.", 99 }
+			};
 			break;
 
 
@@ -79,7 +90,7 @@ public class Terminal2_sc2 : Conversation {
 
 		case 99:
 			DoneTalking();
-			Advance (1);
+			Advance (2);
 			break;
 
 

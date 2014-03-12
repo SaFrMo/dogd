@@ -54,15 +54,15 @@ public class Computer1 : Conversation {
 		switch (key) {
 
 		case 0:
-			toContent = "Target ship <i>Grand Duchy</i> within sensor range. Zero life forms aboard ship. Shall I begin playing the boarding message?";
+			toContent = "Target ship <i>Grand Duchy</i> within sensor range. Zero life forms aboard ship.";
 			AllowPlayerLines();
 			playerLines = new Dictionary<string, int>() {
-				{ "Go ahead, computer.", 1 }
+				{ "Transmit boarding message.", 1 }
 			};
 			break;
 
 		case 1:
-			toContent = "Transmitting. Patching playback through. Good luck, Captain.";
+			toContent = "Transmitting.";
 			AllowContinue();
 			break;
 
