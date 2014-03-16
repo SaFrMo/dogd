@@ -12,6 +12,6 @@ public class RubbleBob : MonoBehaviour {
 		transform.position = new Vector3 (transform.position.x,
 		                                  transform.position.y + sinModifier * 0.001f * (mod),
 		                                  transform.position.z);
-		transform.RotateAround(transform.position, Vector3.forward, rotationRate * 0.01f);
+		transform.Rotate (new Vector3 
 	}
 }

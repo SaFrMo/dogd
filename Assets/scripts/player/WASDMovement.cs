@@ -174,16 +174,31 @@ public class WASDMovement : MonoBehaviour {
 	
 	
 	public bool useJetpack = false;
-	
-	void OnCollisionStay() {
+
+	void OnCollisionEnter (Collision c) {
+		if (!rigidbody.constantForce.enabled) {
+			
+			rigidbody.constantForce.enabled = true;
+			
+		}
+		if (dock == null) {
+			dock = c.collider.gameObject;
+		}
+		canJump = true;
 		
+		canFly = true;
+		flying = false;
+		
+	}
+	
+	void OnCollisionStay(Collision c) {
 		canJump = true;
 		grounded = true;
 		
 	}
 	
 	void OnCollisionExit () {
-		
+		dock = null;
 		grounded = false;
 	}
 	
@@ -283,18 +298,7 @@ public class WASDMovement : MonoBehaviour {
 	}
 	
 	
-	void OnCollisionEnter () {
-		if (!rigidbody.constantForce.enabled) {
-			
-			rigidbody.constantForce.enabled = true;
-			
-		}
-		canJump = true;
-		
-		canFly = true;
-		flying = false;
-		
-	}
+
 	
 	void Dock() {
 		
