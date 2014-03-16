@@ -28,6 +28,7 @@ public class Scene1a : MonoBehaviour {
 			// wait x seconds
 		case 0:
 			if (t.RunTimer()) {
+				t = null;
 				scriptPlace++;
 			}
 			break;
@@ -69,8 +70,113 @@ public class Scene1a : MonoBehaviour {
 			obj = null;
 			scriptPlace++;
 			break;
+
+		case 4:
+			if (t == null) {
+				t = new Timer (5f);
+			}
+			if (t.RunTimer()) {
+				t = null;
+				currentTitle++;
+			}
+			break;
+
+
 		}
 	}
+
+	// GUI PORTION
+	// ==============
+	// for the opening title
+
+	int currentTitle = 0;
+
+	string ShowTitles() {
+		switch (currentTitle) {
+
+		case 0:
+			return string.Empty;
+			break;
+
+		case 1:
+			if (t == null) {
+				t = new Timer (3f);
+			}
+			if (t.RunTimer()) {
+				currentTitle++;
+				t = null;
+				return string.Empty;
+			}
+			else {
+				return "JASON & SANDER GAMES\npresent";
+			}
+			break;
+
+		case 2:
+			if (t == null) {
+				t = new Timer (3f);
+			}
+			if (t.RunTimer()) {
+				currentTitle++;
+				t = null;
+			}
+			return string.Empty;
+			break;
+
+		case 3:
+			if (t == null) {
+				t = new Timer (3f);
+			}
+			if (t.RunTimer()) {
+				currentTitle++;
+				t = null;
+				return string.Empty;
+			}
+			else {
+				return "THE DEATH\nOF THE GRAND DUCHY";
+			}
+			break;
+
+		case 4:
+			if (t == null) {
+				t = new Timer (3f);
+			}
+			if (t.RunTimer()) {
+				currentTitle++;
+				t = null;
+			}
+			return string.Empty;
+			break;
+
+		case 5:
+			if (t == null) {
+				t = new Timer (3f);
+			}
+			if (t.RunTimer()) {
+				currentTitle++;
+				t = null;
+				return string.Empty;
+			}
+			else {
+				return "Other credits here.";
+			}
+			break;
+
+		default:
+			return string.Empty;
+			break;
+
+		
+		};
+	}
+
+	public GUISkin skin;
+
+	void OnGUI () {
+		GUI.skin = skin;
+		GUI.Box (new Rect (Screen.width * .6f, Screen.height * .75f, Screen.width * .4f, Screen.width * .25f), ShowTitles(), skin.customStyles[3]);
+	}
+
 
 	// Use this for initialization
 	void Start () {
