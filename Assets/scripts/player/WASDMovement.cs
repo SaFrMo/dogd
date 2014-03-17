@@ -192,13 +192,17 @@ public class WASDMovement : MonoBehaviour {
 	}
 	
 	void OnCollisionStay(Collision c) {
+		if (dock == null) {
+			dock = c.collider.gameObject;
+			print ("set");
+		}
 		canJump = true;
 		grounded = true;
 		
 	}
 	
 	void OnCollisionExit () {
-		dock = null;
+		//dock = null;
 		grounded = false;
 	}
 	
@@ -349,6 +353,11 @@ public class WASDMovement : MonoBehaviour {
 		
 		//print (animator.GetInteger("Direction"));
 		PlayerAnimation();
+		Controls ();
+		if (dock != null) {
+			Dock();
+		}
+		/*
 		
 		if (dock == null) {
 			
@@ -359,7 +368,7 @@ public class WASDMovement : MonoBehaviour {
 
 				rigidbody.useGravity = true;
 			}
-			*/
+
 			
 		}
 		else {
@@ -370,6 +379,6 @@ public class WASDMovement : MonoBehaviour {
 				//dock = null;
 			}
 		}
-		
+		*/
 	}
 }
