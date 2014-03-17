@@ -32,6 +32,7 @@ public class WASDMovement : MonoBehaviour {
 	public float rotationRate = 1f;
 	
 	Vector3 jumpForce = Vector3.up;
+	public float jumpMod = 1f;
 	
 	
 	// SET TARGET (GO)
@@ -175,6 +176,9 @@ public class WASDMovement : MonoBehaviour {
 	
 	public bool useJetpack = false;
 
+	public float maxJumpCount = 1f;
+	float currentJumpCount = 0;
+
 	void OnCollisionEnter (Collision c) {
 		if (!rigidbody.constantForce.enabled) {
 			
@@ -185,7 +189,7 @@ public class WASDMovement : MonoBehaviour {
 			dock = c.collider.gameObject;
 		}
 		canJump = true;
-		
+		currentJumpCount = 0;
 		canFly = true;
 		flying = false;
 		
@@ -194,7 +198,6 @@ public class WASDMovement : MonoBehaviour {
 	void OnCollisionStay(Collision c) {
 		if (dock == null) {
 			dock = c.collider.gameObject;
-			print ("set");
 		}
 		canJump = true;
 		grounded = true;
@@ -237,24 +240,27 @@ public class WASDMovement : MonoBehaviour {
 		// allows differentiation between tap-jumps and held-jumps
 		if (canJump) {
 			
-			if (Input.GetKeyDown(KeyCode.Space)) {
+			if (Input.GetKeyDown(KeyCode.Space) && currentJumpCount < maxJumpCount) {
 				
-				jumpStart = new Timer (.04f, 5);
+				//jumpStart = new Timer (.04f, 5);
+
+
+				currentJumpCount++;
 				
-				rigidbody.AddRelativeForce (jumpForce, ForceMode.Force);
+				rigidbody.AddRelativeForce (jumpForce * jumpMod, ForceMode.Impulse);
 				
 			}
 			if (Input.GetKey (KeyCode.Space)) {
 				
-				if (jumpStart.RunTimer()) {
+				//if (jumpStart.RunTimer()) {
 					
-					rigidbody.AddRelativeForce (jumpForce, ForceMode.Impulse);
+					//rigidbody.AddRelativeForce (jumpForce * jumpMod, ForceMode.Impulse);
 					
-				}
+				//}
 			}
 			if (Input.GetKeyUp (KeyCode.Space)) {
 				
-				canJump = false;
+				//canJump = false;
 				if (useJetpack) {
 					
 					canFly = true;
